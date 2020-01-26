@@ -1,12 +1,13 @@
-# ticket_pass_package
+# Flutter_Timeline_Widget
 
 
-A Flutter package to display the purchase of a ticket/pass along with additional details such as list of buyers.
+A Flutter widget to list the details of upcoming bookings/events in the form of a timeline
 
-The source code is **100% Dart**, and everything resides in the [/lib](https://github.com/gouthamkumar253/flutter_ticket_pass) folder.
+The source code is **100% Dart**, and everything resides in the [/lib](https://github.com/gouthamkumar253/flutter_timeline_widget) folder.
 
 ## Kindly :star: the repo to support the project
  [![GitHub followers](https://img.shields.io/github/followers/gouthamkumar253.svg?style=social&label=Follow)](https://github.com/gouthamkumar253)
+ [![GitHub followers](https://img.shields.io/github/followers/ks-weasley.svg?style=social&label=Follow)](https://github.com/ks-weasley)
 
 ## 💻 Installation
 

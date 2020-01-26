@@ -3,8 +3,8 @@ import 'calendar.dart';
 import 'UpcomingTab.dart';
 
 class TimeLineWidget extends StatelessWidget {
-  final width;
-  final height;
+  final double width;
+  final double height;
   final Color color;
   final bool swapTimeLine;
 

@@ -3,8 +3,8 @@ import 'time_line_left.dart';
 import 'calendar.dart';
 
 class showUpcoming extends StatelessWidget {
-  final width;
-  final height;
+  final double width;
+  final double height;
   final Color color;
   final bool swapTimeLine;
 
