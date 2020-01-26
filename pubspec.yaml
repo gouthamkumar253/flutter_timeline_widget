@@ -1,8 +1,8 @@
 name: timeline_widget
-description: A Flutter widget to list the details of upcoming bookings&#x2F;events in the form of a timeline
+description: A Flutter widget to list the details of upcoming bookings/events in the form of a timeline
 version: 0.0.1
-author:
-homepage:
+author: Goutham Kumar R <gouthamr1998@gmail.com> Krithika Swaminathan<krithikaswami02@gmail.com>
+homepage: https://github.com/gouthamkumar253/flutter_timeline_widget
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
