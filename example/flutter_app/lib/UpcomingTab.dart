@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'time_line_left.dart';
 import 'calendar.dart';
 
-class showUpcoming extends StatelessWidget {
+import 'time_line_left.dart';
+
+class ShowUpcoming extends StatelessWidget {
+  const ShowUpcoming({
+    this.width = 411.0,
+    this.height = 700.00,
+    this.color = Colors.green,
+    this.swapTimeLine = false,
+  });
+
   final double width;
   final double height;
   final Color color;
   final bool swapTimeLine;
 
-  showUpcoming( {
-    this.width=411.0,
-    this.height=700.00,
-    this.color=Colors.green,
-    this.swapTimeLine=false,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,8 @@ class showUpcoming extends StatelessWidget {
       child: Column(
         children: <Widget>[
           new Calendar(),
-          new TimeLineLeft()//TimeLineLeft(this.width, this.height, this.color, this.swapTimeLine),
+          const TimeLineLeft()
+          //TimeLineLeft(this.width, this.height, this.color, this.swapTimeLine),
         ],
       ),
     );

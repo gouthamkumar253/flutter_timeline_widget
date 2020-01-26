@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 
 class TimeLineLeft extends StatefulWidget {
-  final double width, height;
-  final Color color;
-  final bool swapTimeLine;
-
-  TimeLineLeft({
+  const TimeLineLeft({
     this.width = 411.0,
     this.height = 700.0,
     this.color = Colors.green,
     this.swapTimeLine = true,
   });
 
+  final double width, height;
+  final Color color;
+  final bool swapTimeLine;
+
   @override
   _TimeLineLeftState createState() => _TimeLineLeftState();
 }
 
 class _TimeLineLeftState extends State<TimeLineLeft> {
-  var c = 9;
+  int c = 9;
 
-  Map schedule = <String, dynamic>{
+  Map<String, dynamic> schedule = <String, dynamic>{
     'date': '2020-01-07',
     'bookings': <dynamic>[
       <String, dynamic>{
@@ -32,6 +31,7 @@ class _TimeLineLeftState extends State<TimeLineLeft> {
     ]
   };
 
+  @override
   Widget build(BuildContext context) {
     //widget.width=MediaQuery.of(context).size.width;
     // print(MediaQuery.of(context).size.height);
@@ -88,7 +88,10 @@ class _TimeLineLeftState extends State<TimeLineLeft> {
                 padding: const EdgeInsets.only(left: 17.0, right: 17.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[Text('Oct 2019'), Icon(Icons.group_add)],
+                  children: <Widget>[
+                    const Text('Oct 2019'),
+                    Icon(Icons.group_add)
+                  ],
                 ),
               )
             ],
@@ -100,7 +103,7 @@ class _TimeLineLeftState extends State<TimeLineLeft> {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: c,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return Container(
               height: widget.height / 6,
               child: Row(
