@@ -17,7 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  ticket_pass_package:
+  timeline_widget:
     path: ../../
   flutter:
     sdk: flutter

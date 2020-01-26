@@ -22,11 +22,11 @@ class _TimeLineLeftState extends State<TimeLineLeft> {
 
   Map schedule = <String, dynamic>{
     'date': '2020-01-07',
-    'fitness_classes': [
-      {
+    'bookings': <dynamic>[
+      <String, dynamic>{
         'id': 49,
-        'name': 'Poiuytrewq',
-        'description': 'Classs for fetch class session checking',
+        'name': 'Sample',
+        'description': 'Sample booking',
         'start_date': '2020-01-07'
       }
     ]
@@ -81,8 +81,8 @@ class _TimeLineLeftState extends State<TimeLineLeft> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               ListTile(
-                title: Text(schedule['Oct1']['Details']),
-                subtitle: Text(schedule['Oct1']['Time']),
+                title: Text(schedule['date']),
+                subtitle: Text(schedule['bookings'][0]['name']),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 17.0, right: 17.0),
