@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_widget/timeline_widget.dart';
+import 'FancyEntries.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,49 +19,16 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: TimeLine(
-        timelineItems: <TimelineItem>[
-          TimelineItem(
-            timelineTitle: CircleAvatar(
-              child: const Text('hello'),
-              backgroundColor: Colors.green,
-            ),
-            separator: const SizedBox(
-              width: 10,
-            ),
-            timeLineDescription: Expanded(
-              child: Card(
-                elevation: 4,
-                child: Container(
-                  height: 100,
-                  child: Center(
-                    child: const Text('iam the child'),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          TimelineItem(
-            timelineTitle: CircleAvatar(
-              child: const Text('hello'),
-              backgroundColor: Colors.green,
-            ),
-            separator: const SizedBox(
-              width: 10,
-            ),
-            timeLineDescription: Expanded(
-              child: Card(
-                elevation: 4,
-                child: Container(
-                  height: 100,
-                  child: Center(
-                    child: const Text('iam the child'),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        betTimeLineItems: 50,
+        containerHeight: MediaQuery.of(context).size.height,
+        timelineItems: t.map((TimelineItem item) {
+      return TimelineItem(
+        timeLineDescription: item.timeLineDescription,
+        timelineTitle: item.timelineTitle,
+        separator: item.separator,
+      );
+    }).toList()
+    )
     );
   }
 }

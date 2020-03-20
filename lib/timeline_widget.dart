@@ -6,6 +6,7 @@ import 'package:timeline_widget/utils/toast.dart';
 
 enum TimeLineAlignment { left, right }
 enum ToastPosition { CENTER, BOTTOM }
+enum ChainType { DOTTED, DASHED, SOLID }
 
 typedef void OnDateTapScroll(DateTime date);
 
@@ -32,6 +33,16 @@ class TimeLine extends StatefulWidget {
     this.eventDescription,
     this.scrollCurve = Curves.linear,
     this.timelineAlignment = TimeLineAlignment.left,
+    this.curatedLineDesign = const CuratedLineDesign(
+      chainType: ChainType.DASHED,
+      dashedLineHeight: 10.0,
+      circleRadius: 4.0,
+      height: 100.0,
+      lineWidth: 1.0,
+      color: Colors.grey,
+      space: 20.0,
+    ),
+    @required this.containerHeight ,
     this.showCalendar = true,
     this.calendar,
     this.onDateTapScroll,
@@ -40,12 +51,16 @@ class TimeLine extends StatefulWidget {
     this.toastDuration = 3,
     this.toastBackgroundColor = Colors.blue,
     this.toastTextColor = Colors.white,
+    this.betTimeLineItems=50.0,
   }) : super(key: key);
 
   final List<dynamic> events;
+  final double betTimeLineItems;
   final Color lineColor;
   final double lineWidth;
   final List<TimelineItem> timelineItems;
+  final CuratedLineDesign curatedLineDesign;
+  final double containerHeight;
   final Widget eventDescription;
   final Curve scrollCurve;
   final TimeLineAlignment timelineAlignment;
@@ -118,73 +133,190 @@ class _TimeLineState extends State<TimeLine> {
     _calendarController = CalendarController();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        widget.showCalendar
-            ? widget.calendar != null
-                ? widget.calendar
-                : Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    child: TableCalendar(
-                      initialCalendarFormat: CalendarFormat.week,
-                      calendarController: _calendarController,
-                      calendarStyle: CalendarStyle(
-                        todayColor: Colors.redAccent,
-                        highlightToday: true,
+    return Container(
+      child: Column(
+        children: <Widget>[
+          widget.showCalendar
+              ? widget.calendar != null
+                  ? widget.calendar
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
                       ),
-                    ),
-                  )
-            : Container(),
-        Expanded(
-          child: Container(
-            child: Stack(
+                      child: TableCalendar(
+                        initialCalendarFormat: CalendarFormat.week,
+                        calendarController: _calendarController,
+                        calendarStyle: CalendarStyle(
+                          todayColor: Colors.redAccent,
+                          highlightToday: true,
+                        ),
+                      ),
+                    )
+              : Container(),
+          Expanded(
+            child: ListView(
               children: <Widget>[
-                Positioned(
-                  top: 0,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: 50,
-                    child: Center(
-                      child: Container(
-                        width: 1,
-                        height: 500,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                Column(
-                  children: widget.timelineItems.map((TimelineItem item) {
-                    return Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              item.timelineTitle,
-                              item.separator,
-                              item.timeLineDescription,
-                            ],
+                Container(
+
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        top: 0,
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          width: 50,
+                          child: Center(
+                            child: CuratedLineDesign(
+                              height:widget.containerHeight,
+                              dashedLineHeight:
+                                  widget.curatedLineDesign.dashedLineHeight,
+                              chainType: widget.curatedLineDesign.chainType,
+                              circleRadius:
+                                  widget.curatedLineDesign.circleRadius,
+                              space: widget.curatedLineDesign.space,
+                              lineWidth: widget.curatedLineDesign.lineWidth,
+                              color: widget.curatedLineDesign.color,
+                            ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ],
+                      ),
+                      Column(
+                        children: widget.timelineItems.map((TimelineItem item){
+                          return Column(
+                            children: <Widget>[
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    item.timelineTitle,
+                                    item.separator,
+                                    item.timeLineDescription,
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                //separator between two children
+                                height: widget.betTimeLineItems ,
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+        ]),
+
+
+                  ),
+
+                ],
             ),
           ),
-        ),
-      ],
+
+          ]),
+      );
+  }
+}
+
+class CuratedLineDesign extends StatelessWidget {
+  final ChainType chainType; //type of chaining- enumerator ChainType
+  final double height; //total container height
+  final double dashedLineHeight; //height of each dash
+  final double circleRadius; //radius of each dot
+  final Color color; //color of the chain
+  final double space; //space between any two dots or dashes
+  final double lineWidth; //Solid Line or Dashed Line width
+
+  const CuratedLineDesign({
+    this.chainType,
+    this.height,
+    this.dashedLineHeight,
+    this.lineWidth,
+    this.circleRadius,
+    this.color,
+    this.space,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return (chainType == ChainType.DASHED)
+        ? dashDesign()
+        : (chainType == ChainType.SOLID)
+            ? solidDesign()
+            : (chainType == ChainType.DOTTED) ? goliDesign() : null;
+  }
+
+  Widget dashDesign() {
+    List<Widget> dashes = new List<Widget>();
+    int x = (height / (dashedLineHeight + space)).floor();
+    for (int i = 0; i < x; i++)
+      dashes.add(Column(
+        children: <Widget>[
+          Container(
+            width: lineWidth,
+            height: dashedLineHeight,
+            color: color,
+          ),
+          Container(
+            width: lineWidth,
+            height: space,
+          )
+        ],
+      ));
+    (height - (dashes.length * (dashedLineHeight + space)) >= dashedLineHeight)
+        ? dashes.add(Container(
+            width: lineWidth,
+            height: dashedLineHeight,
+            color: color,
+          ))
+        : dashes.add(Container(
+            width: lineWidth,
+            height: height - dashes.length * (dashedLineHeight + space),
+            color: color,
+          ));
+    return Column(
+        //mainAxisAlignment: MainAxisAlignment.center,
+        children: dashes);
+  }
+
+  Widget goliDesign() {
+    List<Widget> golis = new List<Widget>();
+    int tempHeight = (height / (circleRadius * 2 + space)).floor();
+    for (int i = 0; i < tempHeight; i++)
+      golis.add(Column(
+        children: <Widget>[
+          CircleAvatar(
+            radius: circleRadius,
+            backgroundColor: color,
+          ),
+          Container(
+            height: space,
+          )
+        ],
+      ));
+    if (height - ((circleRadius * 2 + space) * golis.length) >=
+        circleRadius * 2)
+      golis.add(CircleAvatar(
+        radius: circleRadius,
+        backgroundColor: color,
+      ));
+    return Column(
+      children: golis,
+    );
+  }
+
+  Widget solidDesign() {
+    return Container(
+      //line
+      width: lineWidth,
+      height: height,
+      color: Colors.black,
     );
   }
 }
