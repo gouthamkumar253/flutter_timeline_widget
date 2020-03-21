@@ -7,7 +7,7 @@ class Schedule{
     this.dateTime,
     this.title,
     this.description,
-  });
+});
   GlobalKey key;
   final DateTime dateTime;
   final List<String> title;
@@ -25,22 +25,22 @@ List<Schedule> scheduleList=<Schedule>[
     description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
   Schedule(
-    dateTime: DateTime.now().add(const Duration(days: 1)),
+      dateTime: DateTime.now().add(const Duration(days: 1)),
     title: <String>['Hornets vs. Lakers', 'Knicks vs. Warriors', 'Suns vs. Mavericks'],
     description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
   Schedule(
-    dateTime: DateTime.now().add(const Duration(days: 2)),
+      dateTime: DateTime.now().add(const Duration(days: 2)),
     title: <String>['Pistons vs. Lakers', 'Raptors vs Nuggets', 'Spurrs vs. Jazz'],
     description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
   Schedule(
-    dateTime: DateTime.now().add(const Duration(days: 4)),
+      dateTime: DateTime.now().add(const Duration(days: 4)),
     title: <String>['Raptors vs. Lakers', 'Pelicians vs. Grizzlies', 'Caveliers vs. Kings'],
     description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
   Schedule(
-    dateTime: DateTime.now().add(const Duration(days: 10)),
+      dateTime: DateTime.now().add(const Duration(days: 10)),
     title: <String>['Hornets vs. Heat', 'Nuggets vs. Thunder', 'Clippers vs. Pacers'],
     description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
