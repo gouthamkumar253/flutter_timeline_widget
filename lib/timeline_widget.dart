@@ -1,8 +1,11 @@
 library timeline_widget;
 
 import 'package:flutter/material.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_widget/utils/toast.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'FancyEntries.dart';
 
 enum TimeLineAlignment { left, right }
 enum ToastPosition { CENTER, BOTTOM }
@@ -47,10 +50,10 @@ class TimeLine extends StatefulWidget {
     this.calendar,
     this.onDateTapScroll,
     this.noMatchMessage = 'No matches found for chosen date',
-    this.toastPosition = ToastPosition.BOTTOM,
-    this.toastDuration = 3,
-    this.toastBackgroundColor = Colors.blue,
-    this.toastTextColor = Colors.white,
+    this.timeToScroll = const Duration(seconds: 2),
+    this.noMatchDuration = const Duration(seconds: 2),
+    this.noMatchBackgroundColor = Colors.black,
+    this.noMatchTextColor = Colors.white,
     this.betTimeLineItems=50.0,
   }) : super(key: key);
 
@@ -68,17 +71,18 @@ class TimeLine extends StatefulWidget {
   final Widget calendar;
   final OnDateTapScroll onDateTapScroll;
   final String noMatchMessage;
-  final ToastPosition toastPosition;
-  final int toastDuration;
-  final Color toastBackgroundColor;
-  final Color toastTextColor;
+  final Duration timeToScroll;
+  final Duration noMatchDuration;
+  final Color noMatchBackgroundColor;
+  final Color noMatchTextColor;
 
   @override
   _TimeLineState createState() => _TimeLineState();
 }
 
 class _TimeLineState extends State<TimeLine> {
-  ScrollController _scrollController;
+  ItemScrollController itemScrollController ;
+
   CalendarController _calendarController;
 
 //  void _computeScroll(List<String> scrollClasses, DateTime currDate) {
@@ -129,11 +133,35 @@ class _TimeLineState extends State<TimeLine> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _scrollController = ScrollController();
+    itemScrollController = ItemScrollController();
     _calendarController = CalendarController();
   }
 
+  void daySelectScrollToEvent(String tappedDate){
+    int index= -1;
+   for(int i=0;i< widget.timelineItems.length;i++){
+     print(scheduleList[i].dateTimeProvider());
+      if(scheduleList[i].dateTimeProvider()== tappedDate){
+        index=i;
+        break;
+      }}
+    print(index);
+    if(index == -1)
+      {
+        SnackBar snackBar= SnackBar(
+          content: Text(widget.noMatchMessage,
+            style: TextStyle(fontSize: 25.0, color: widget.noMatchTextColor),),
+          duration: widget.noMatchDuration,
+          backgroundColor: widget.noMatchBackgroundColor,
+        );
+        Scaffold.of(context).showSnackBar(snackBar);
+      }
+    else itemScrollController.scrollTo(
+        index: index,
+        duration:widget.timeToScroll,
+        curve: widget.scrollCurve);
 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,73 +183,94 @@ class _TimeLineState extends State<TimeLine> {
                           todayColor: Colors.redAccent,
                           highlightToday: true,
                         ),
-                      ),
+                      onDaySelected: (DateTime tappedDate, List events)=>
+                          daySelectScrollToEvent(tappedDate.year.toString()+'-'+tappedDate.month.toString()+'-'+tappedDate.day.toString()),),
                     )
               : Container(),
           Expanded(
-            child: ListView(
-              children: <Widget>[
+            child: ScrollablePositionedList.builder(
+              itemCount: widget.timelineItems.length,
+              itemScrollController: itemScrollController,
+              itemBuilder: (context, index)=>
                 Container(
 
-                  child: Stack(
+                  child: Column(
                     children: <Widget>[
-                      Positioned(
-                        top: 0,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          width: 50,
-                          child: Center(
-                            child: CuratedLineDesign(
-                              height:widget.containerHeight,
-                              dashedLineHeight:
-                                  widget.curatedLineDesign.dashedLineHeight,
-                              chainType: widget.curatedLineDesign.chainType,
-                              circleRadius:
-                                  widget.curatedLineDesign.circleRadius,
-                              space: widget.curatedLineDesign.space,
-                              lineWidth: widget.curatedLineDesign.lineWidth,
-                              color: widget.curatedLineDesign.color,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Column(
-                        children: widget.timelineItems.map((TimelineItem item){
-                          return Column(
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    item.timelineTitle,
-                                    item.separator,
-                                    item.timeLineDescription,
-                                  ],
+                      Stack(
+                        children: <Widget>[
+                          Positioned(
+                            top: 0,
+                            child: Container(
+                              width: 70,
+                              alignment: Alignment.centerLeft,
+                              child: Center(
+                                child: CuratedLineDesign(
+                                  height:widget.containerHeight,
+                                  dashedLineHeight:
+                                      widget.curatedLineDesign.dashedLineHeight,
+                                  chainType: widget.curatedLineDesign.chainType,
+                                  circleRadius:
+                                      widget.curatedLineDesign.circleRadius,
+                                  space: widget.curatedLineDesign.space,
+                                  lineWidth: widget.curatedLineDesign.lineWidth,
+                                  color: widget.curatedLineDesign.color,
                                 ),
                               ),
-                              SizedBox(
-                                //separator between two children
-                                height: widget.betTimeLineItems ,
+                            ),
+                          ),
+                          Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(horizontal: 4),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        widget.timelineItems[index].timelineTitle,
+                                        widget.timelineItems[index].separator,
+                                        widget.timelineItems[index].timeLineDescription,
+                                      ],
+                                    ),
+                                  )]),
+
+                                ],
                               ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-        ]),
+                      Stack(
+                          children:<Widget> [
+                            SizedBox(
+                              //separator between two children
+                              height: widget.betTimeLineItems ,
+                            ),
+                            Positioned(
+                              top: 0,
+                              child: Container(
+                                width: 70,
+                                alignment: Alignment.centerLeft,
+                                child: Center(
+                                  child: CuratedLineDesign(
+                                    height:widget.betTimeLineItems,
+                                    dashedLineHeight:
+                                    widget.curatedLineDesign.dashedLineHeight,
+                                    chainType: widget.curatedLineDesign.chainType,
+                                    circleRadius:
+                                    widget.curatedLineDesign.circleRadius,
+                                    space: widget.curatedLineDesign.space,
+                                    lineWidth: widget.curatedLineDesign.lineWidth,
+                                    color: widget.curatedLineDesign.color,
+                                  ),
+                                ),
+                              ),
+                            ),
 
+                          ]),],
+                  )
 
-                  ),
-
-                ],
-            ),
-          ),
-
-          ]),
-      );
+                      )
+            )),
+        ]));
   }
 }
+
 
 class CuratedLineDesign extends StatelessWidget {
   final ChainType chainType; //type of chaining- enumerator ChainType
@@ -249,7 +298,7 @@ class CuratedLineDesign extends StatelessWidget {
         ? dashDesign()
         : (chainType == ChainType.SOLID)
             ? solidDesign()
-            : (chainType == ChainType.DOTTED) ? goliDesign() : null;
+            : (chainType == ChainType.DOTTED) ? dottedDesign() : null;
   }
 
   Widget dashDesign() {
@@ -285,11 +334,11 @@ class CuratedLineDesign extends StatelessWidget {
         children: dashes);
   }
 
-  Widget goliDesign() {
-    List<Widget> golis = new List<Widget>();
+  Widget dottedDesign() {
+    List<Widget> dots = new List<Widget>();
     int tempHeight = (height / (circleRadius * 2 + space)).floor();
     for (int i = 0; i < tempHeight; i++)
-      golis.add(Column(
+      dots.add(Column(
         children: <Widget>[
           CircleAvatar(
             radius: circleRadius,
@@ -300,14 +349,14 @@ class CuratedLineDesign extends StatelessWidget {
           )
         ],
       ));
-    if (height - ((circleRadius * 2 + space) * golis.length) >=
+    if (height - ((circleRadius * 2 + space) * dots.length) >=
         circleRadius * 2)
-      golis.add(CircleAvatar(
+      dots.add(CircleAvatar(
         radius: circleRadius,
         backgroundColor: color,
       ));
     return Column(
-      children: golis,
+      children: dots,
     );
   }
 

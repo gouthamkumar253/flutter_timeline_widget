@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   table_calendar:
-
+  scrollable_positioned_list: ^0.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

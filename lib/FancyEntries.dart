@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:timeline_widget/timeline_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -9,35 +10,39 @@ class Schedule{
 });
   GlobalKey key;
   final DateTime dateTime;
-  final String title;
-  final String description;
+  final List<String> title;
+  final List<String> description;
+
+  String dateTimeProvider(){
+    return dateTime.year.toString()+'-'+dateTime.month.toString()+'-'+dateTime.day.toString();
+  }
 }
 List<Schedule> scheduleList=<Schedule>[
   Schedule(
 
     dateTime: DateTime.now(),
-    title: "Wizards vs. Celitics",
-    description: "TIME TO BE DECIDED"
+    title: <String>['Wizards vs. Celitics', 'Pacers vs. Heat', 'Raptors vs. Celitics'],
+    description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
   Schedule(
-      dateTime: DateTime.now().add(Duration(days: 1)),
-      title: "Wizards vs. Celitics",
-      description: "TIME TO BE DECIDED"
+      dateTime: DateTime.now().add(const Duration(days: 1)),
+    title: <String>['Hornets vs. Lakers', 'Knicks vs. Warriors', 'Suns vs. Mavericks'],
+    description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
   Schedule(
-      dateTime: DateTime.now().add(Duration(days: 2)),
-      title: "Wizards vs. Celitics",
-      description: "TIME TO BE DECIDED"
+      dateTime: DateTime.now().add(const Duration(days: 2)),
+    title: <String>['Pistons vs. Lakers', 'Raptors vs Nuggets', 'Spurrs vs. Jazz'],
+    description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
   Schedule(
-      dateTime: DateTime.now().add(Duration(days: 4)),
-      title: "Wizards vs. Celitics",
-      description: "TIME TO BE DECIDED"
+      dateTime: DateTime.now().add(const Duration(days: 4)),
+    title: <String>['Raptors vs. Lakers', 'Pelicians vs. Grizzlies', 'Caveliers vs. Kings'],
+    description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
   Schedule(
-      dateTime: DateTime.now().add(Duration(days: 10)),
-      title: "Wizards vs. Celitics",
-      description: "TIME TO BE DECIDED"
+      dateTime: DateTime.now().add(const Duration(days: 10)),
+    title: <String>['Hornets vs. Heat', 'Nuggets vs. Thunder', 'Clippers vs. Pacers'],
+    description: <String>['TIME TO BE DECIDED','TIME TO BE DECIDED','TIME TO BE DECIDED'],
   ),
 ];
 List<TimelineItem> t = [
